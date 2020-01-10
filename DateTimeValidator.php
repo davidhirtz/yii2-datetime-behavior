@@ -1,11 +1,12 @@
 <?php
 /**
  * @author David Hirtz <hello@davidhirtz.com>
- * @copyright Copyright (c) 2017 David Hirtz
- * @version 1.1.2
+ * @copyright Copyright (c) 2020 David Hirtz
+ * @version 1.1.3
  */
+
 namespace davidhirtz\yii2\datetime;
-use DateTimeZone;
+
 use Yii;
 
 /**
@@ -14,61 +15,54 @@ use Yii;
  */
 class DateTimeValidator extends \yii\validators\Validator
 {
-	/**
-	 * @var string
-	 */
-	public $dateClass;
+    /**
+     * @var \DateTime|string
+     */
+    public $dateClass;
 
-	/**
-	 * @var string
-	 */
-	public $timezone;
+    /**
+     * @var DateTimeZone|string
+     */
+    public $timezone;
 
-	/**
-	 * Sets default values.
-	 */
-	public function init()
-	{
-		if($this->message===null)
-		{
-			$this->message=Yii::t('yii', 'The format of {attribute} is invalid.');
-		}
+    /**
+     * Sets default values.
+     */
+    public function init()
+    {
+        if ($this->message === null) {
+            $this->message = Yii::t('yii', 'The format of {attribute} is invalid.');
+        }
 
-		if(!$this->timezone)
-		{
-			$this->timezone=new DateTimeZone(Yii::$app->getTimeZone());
-		}
+        if (!$this->timezone || is_string($this->timezone)) {
+            $this->timezone = new DateTimeZone($this->timezone ?: Yii::$app->getTimeZone());
+        }
 
-		if(!$this->dateClass)
-		{
-			$this->dateClass='\davidhirtz\yii2\datetime\DateTime';
-		}
+        if (!$this->dateClass) {
+            $this->dateClass = '\davidhirtz\yii2\datetime\DateTime';
+        }
 
-		parent::init();
-	}
+        parent::init();
+    }
 
-	/**
-	 * Validates DateTime.
-	 * @param \yii\db\ActiveRecord $model
-	 * @param string $attribute
-	 */
-	public function validateAttribute($model, $attribute)
-	{
-		if(!$model->{$attribute} instanceof $this->dateClass)
-		{
-			try
-			{
-				$callback=function($matches)
-				{
-					return $matches[2].'/'.$matches[1].'/'.($matches[3] ?: date('Y'));
-				};
+    /**
+     * Validates DateTime.
+     *
+     * @param \yii\db\ActiveRecord $model
+     * @param string $attribute
+     */
+    public function validateAttribute($model, $attribute)
+    {
+        if (!$model->{$attribute} instanceof $this->dateClass) {
+            try {
+                // Replace European date dd.mm.yy with US mm/dd/yy
+                $model->{$attribute} = @new $this->dateClass(preg_replace_callback('#^(\d{1,2})\.(\d{1,2})\.?(\d{0,4})#', function ($matches) {
+                    return $matches[2] . '/' . $matches[1] . '/' . ($matches[3] ?: date('Y'));
+                }, $model->{$attribute}), $this->timezone);
 
-				$model->{$attribute}=@new $this->dateClass(preg_replace_callback('#^(\d{1,2})\.(\d{1,2})\.?(\d{0,4})#', $callback, $model->{$attribute}), $this->timezone);
-			}
-			catch(\Exception $ex)
-			{
-				$this->addError($model, $attribute, $this->message);
-			}
-		}
-	}
+            } catch (\Exception $ex) {
+                $this->addError($model, $attribute, $this->message);
+            }
+        }
+    }
 }
