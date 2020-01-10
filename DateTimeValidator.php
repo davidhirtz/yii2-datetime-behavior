@@ -7,6 +7,8 @@
 
 namespace davidhirtz\yii2\datetime;
 
+use DateTime;
+use DateTimeZone;
 use Yii;
 
 /**
@@ -16,7 +18,7 @@ use Yii;
 class DateTimeValidator extends \yii\validators\Validator
 {
     /**
-     * @var \DateTime|string
+     * @var DateTime|string
      */
     public $dateClass;
 
