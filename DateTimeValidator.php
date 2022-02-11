@@ -2,7 +2,7 @@
 /**
  * @author David Hirtz <hello@davidhirtz.com>
  * @copyright Copyright (c) 2020 David Hirtz
- * @version 1.1.3
+ * @version 1.1.4
  */
 
 namespace davidhirtz\yii2\datetime;
@@ -10,9 +10,10 @@ namespace davidhirtz\yii2\datetime;
 use DateTime;
 use DateTimeZone;
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
- * Class DateTimeValidator.
+ * Class DateTimeValidator
  * @package app\components\validators
  */
 class DateTimeValidator extends \yii\validators\Validator
@@ -66,7 +67,7 @@ class DateTimeValidator extends \yii\validators\Validator
 
         // If the date hasn't changed, set the attribute to the old record so it passes Yii's `isAttributeChanged`
         // method which requires the DateTime objects to be identical and thus will not be updated on save.
-        if ($model->{$attribute} == $model->getOldAttribute($attribute)) {
+        if ($model instanceof ActiveRecord && $model->{$attribute} == $model->getOldAttribute($attribute)) {
             $model->{$attribute} = $model->getOldAttribute($attribute);
         }
     }
