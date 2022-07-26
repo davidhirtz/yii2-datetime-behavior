@@ -1,15 +1,9 @@
 <?php
-/**
- * @author David Hirtz <hello@davidhirtz.com>
- * @copyright Copyright (c) 2020 David Hirtz
- * @version 1.1.3
- */
 
 namespace davidhirtz\yii2\datetime;
 
 /**
- * Class Date.
- * @package davidhirtz\yii2\datetime
+ * Date extends the default DateTime object by returning a MySQL-conform date string.
  */
 class Date extends \DateTime
 {

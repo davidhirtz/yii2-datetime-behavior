@@ -1,9 +1,4 @@
 <?php
-/**
- * @author David Hirtz <hello@davidhirtz.com>
- * @copyright Copyright (c) 2020 David Hirtz
- * @version 1.1.3
- */
 
 namespace davidhirtz\yii2\datetime;
 
@@ -13,8 +8,7 @@ use yii\db\ActiveRecord;
 use Yii;
 
 /**
- * Class DateTimeBehavior
- * @package davidhirtz\yii2\behaviors
+ * DateTimeBehavior transforms model attributes to {@link DateTime} objects after find.
  */
 class DateTimeBehavior extends Behavior
 {
@@ -23,10 +17,9 @@ class DateTimeBehavior extends Behavior
     const TYPE_TIMESTAMP = 'timestamp';
 
     /**
-     * @var array list of attributes that should be transformed to DateTime instances.
-     * This can be either an array of attribute names as values, or attribute names as
-     * keys with the corresponding database column type date, datetime or int as values
-     * or a given DateTime class.
+     * @var array list of attributes that should be transformed to DateTime instances. This can be either an array of
+     * attribute names as values, or attribute names as keys with the corresponding database column type date, datetime
+     * or int as values or a given DateTime class.
      */
     public $attributes;
 

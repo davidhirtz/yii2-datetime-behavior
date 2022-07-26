@@ -33,7 +33,7 @@ public function behaviors()
 {
 	return [
 		[
-			'class'=>DateTimeBehavior::className(),
+			'class'=>DateTimeBehavior::class,
 			//'attributes'=>['custom_attribute', 'another_attribute'],
 		],
 	];

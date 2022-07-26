@@ -1,15 +1,9 @@
 <?php
-/**
- * @author David Hirtz <hello@davidhirtz.com>
- * @copyright Copyright (c) 2020 David Hirtz
- * @version 1.1.3
- */
 
 namespace davidhirtz\yii2\datetime;
 
 /**
- * Class Timestamp.
- * @package davidhirtz\yii2\datetime
+ * Date extends the default DateTime to return a timestamp on string.
  */
 class Timestamp extends \DateTime
 {

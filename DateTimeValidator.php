@@ -1,9 +1,4 @@
 <?php
-/**
- * @author David Hirtz <hello@davidhirtz.com>
- * @copyright Copyright (c) 2020 David Hirtz
- * @version 1.1.4
- */
 
 namespace davidhirtz\yii2\datetime;
 
@@ -13,8 +8,7 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * Class DateTimeValidator
- * @package app\components\validators
+ * DateTimeValidator checks if the attribute value is a valid date.
  */
 class DateTimeValidator extends \yii\validators\Validator
 {
@@ -73,12 +67,18 @@ class DateTimeValidator extends \yii\validators\Validator
     }
 
     /**
-     * Replaces European date format dd.mm.yy with US mm/dd/yy.
-     * @param string $datetime
+     * Replaces European date format dd.mm.yy with US mm/dd/yy and joins array values from {@link DateTimeInput} to
+     * date string.
+     *
+     * @param string|array $datetime
      * @return string|string[]|null
      */
     protected function formatDateTime($datetime)
     {
+        if (isset($datetime['date'], $datetime['time'])) {
+            $datetime = "{$datetime['date']} {$datetime['time']}";
+        }
+
         return preg_replace_callback('#^(\d{1,2})\.(\d{1,2})\.?(\d{0,4})#', function ($matches) {
             return $matches[2] . '/' . $matches[1] . '/' . ($matches[3] ?: date('Y'));
         }, $datetime);
