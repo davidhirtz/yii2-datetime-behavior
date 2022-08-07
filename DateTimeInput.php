@@ -35,6 +35,12 @@ class DateTimeInput extends InputWidget
         $options['required'] = $options['required'] ?? ($this->hasModel() && $this->model->isAttributeRequired($this->attribute));
 
         $dateInput = Html::input('date', "{$name}[date]", $dateTime instanceof DateTime ? $dateTime->format('Y-m-d') : null, $options);
+
+        // Make sure the ID is not the same as date field, if id was set to `false` don't adjust
+        if (($options['id'] ?? true) !== false) {
+            $options['id'] = ($options['id'] ?? ($this->hasModel() ? Html::getInputId($this->model, $this->attribute) : Html::getInputIdByName($this->name))) . '-time';
+        }
+
         $timeInput = Html::input('time', "{$name}[time]", $dateTime instanceof DateTime ? $dateTime->format('H:i') : null, $options);
 
         echo strtr($this->template, [
